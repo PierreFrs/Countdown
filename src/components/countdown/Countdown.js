@@ -1,7 +1,43 @@
 import React from 'react'
 import'./Countdown.scss'
+import { useState, useEffect } from 'react'
 
 const Countdown = () => {
+  const [days, setDays] = useState("00");
+  const [hours, setHours] = useState("00");
+  const [minutes, setMinutes] = useState("00");
+  const [seconds, setSeconds] = useState("00");
+  
+  const startCountdown = () => {
+    let interval = setInterval(() => {
+      const endDate = new Date("Dec 25, 2023");
+      const currentDate = new Date();
+      const totalSeconds = (endDate - currentDate) / 1000;
+
+      const daysCount = Math.floor(totalSeconds / 3600 / 24)
+      const hoursCount = Math.floor(totalSeconds / 3600) % 24;
+      const minutesCount = Math.floor(totalSeconds / 60) % 60;
+      const secondsCount = Math.floor(totalSeconds) % 60;
+      
+      if (totalSeconds < 1) {
+        // Do something
+      } else {
+        setDays(`${format(daysCount)}`);
+        setHours(`${format(hoursCount)}`);
+        setMinutes(`${format(minutesCount)}`);
+        setSeconds(`${format(secondsCount)}`);
+      }
+    }, 1000);
+  };
+
+  function format(t) {
+    return t < 10 ? `0${t}` : t;
+  }
+
+  useEffect(() => {
+    startCountdown();
+  }, [])
+
   return (
     <div className='countdown-section'>
       <div className="container --flex-between">
@@ -9,19 +45,19 @@ const Countdown = () => {
         <div className="countdown --card --my">
           <time className="--flex-center --text-center --color-white --p">
             <span>
-              <p>00</p>
+              <p>{days}</p>
               <small>Days</small>
             </span>
             <span>
-              <p>01</p>
+              <p>{hours}</p>
               <small>Hours</small>
             </span>
             <span>
-              <p>20</p>
+              <p>{minutes}</p>
               <small>Minutes</small>
             </span>
             <span>
-              <p>50</p>
+              <p>{seconds}</p>
               <small>Seconds</small>
             </span>
           </time>
