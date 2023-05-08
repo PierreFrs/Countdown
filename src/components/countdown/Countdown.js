@@ -2,11 +2,13 @@ import React from 'react'
 import'./Countdown.scss'
 import { useState, useEffect } from 'react'
 
-const Countdown = () => {
+const Countdown = ({onHideCountdown}) => {
   const [days, setDays] = useState("00");
   const [hours, setHours] = useState("00");
   const [minutes, setMinutes] = useState("00");
   const [seconds, setSeconds] = useState("00");
+
+  const [countdownEnded, setCountdownEnded] = useState(false);
   
   const startCountdown = () => {
     let interval = setInterval(() => {
@@ -20,7 +22,8 @@ const Countdown = () => {
       const secondsCount = Math.floor(totalSeconds) % 60;
       
       if (totalSeconds < 1) {
-        // Do something
+        setCountdownEnded(true);
+        clearInterval(interval);
       } else {
         setDays(`${format(daysCount)}`);
         setHours(`${format(hoursCount)}`);
@@ -41,7 +44,7 @@ const Countdown = () => {
   return (
     <div className='countdown-section'>
       <div className="container --flex-between">
-        <h2 className='--text-md'>Christmas Sale</h2>
+        <h2 className='--text-md'>{!countdownEnded ? "Christmas Sale !" : "Sale Ended..."}</h2>
         <div className="countdown --card --my">
           <time className="--flex-center --text-center --color-white --p">
             <span>
@@ -61,10 +64,9 @@ const Countdown = () => {
               <small>Seconds</small>
             </span>
           </time>
-
         </div>
       </div>
-      <p className='close'>x</p>
+      <p className='close' onClick={onHideCountdown}>X</p>
     </div>
   )
 }
